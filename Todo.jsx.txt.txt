@@ -1,0 +1,92 @@
+import React, { useState } from "react";
+
+function Todolist() {
+
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  // Add task
+  const addTask = () => {
+
+    if (task.trim() === "") {
+      return;
+    }
+
+    const newTask = {
+      id: Date.now(),
+      text: task,
+      completed: false
+    };
+
+    setTasks([...tasks, newTask]);
+    setTask("");
+  };
+
+  // Mark completed
+  const completeTask = (id) => {
+
+    setTasks(
+      tasks.map((item) =>
+        item.id === id
+          ? { ...item, completed: !item.completed }
+          : item
+      )
+    );
+  };
+
+  // Delete task
+  const deleteTask = (id) => {
+
+    setTasks(
+      tasks.filter((item) => item.id !== id)
+    );
+  };
+
+  return (
+    <div>
+
+      <h1>To-Do List</h1>
+
+      <input
+        type="text"
+        placeholder="Enter task"
+        value={task}
+        onChange={(event) => setTask(event.target.value)}
+      />
+
+      <button onClick={addTask}>
+        Add
+      </button>
+
+      <ul>
+
+        {tasks.map((item) => (
+
+          <li key={item.id}>
+
+            <span
+              onClick={() => completeTask(item.id)}
+              style={{
+                textDecoration: item.completed
+                  ? "line-through"
+                  : "none"
+              }}
+            >
+              {item.text}
+            </span>
+
+            <button onClick={() => deleteTask(item.id)}>
+              Delete
+            </button>
+
+          </li>
+
+        ))}
+
+      </ul>
+
+    </div>
+  );
+}
+
+export default Todolist
